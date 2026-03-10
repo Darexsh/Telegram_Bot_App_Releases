@@ -186,6 +186,53 @@ If you want automatic Telegram notifications when a release is published (withou
 
 * * *
 
+🔁 Token Rotation Script (Multi-Repo)
+-------------------------------------
+
+This repository includes a helper script to update the GitHub Actions secret
+`TELEGRAM_BOT_TOKEN` across repositories that contain the release workflow.
+
+Script path:
+
+* `scripts/update_telegram_secret.sh`
+* `scripts/update_telegram_secret.ps1`
+
+Usage:
+
+```bash
+chmod +x scripts/update_telegram_secret.sh
+./scripts/update_telegram_secret.sh Darexsh
+```
+
+`Darexsh` is the required GitHub owner argument (`<github-owner>`).
+
+Or with environment variable:
+
+```bash
+NEW_TG_TOKEN='YOUR_NEW_BOT_TOKEN' ./scripts/update_telegram_secret.sh Darexsh
+```
+
+PowerShell (Windows):
+
+```powershell
+.\scripts\update_telegram_secret.ps1 Darexsh
+```
+
+PowerShell with environment variable:
+
+```powershell
+$env:NEW_TG_TOKEN='YOUR_NEW_BOT_TOKEN'
+.\scripts\update_telegram_secret.ps1 Darexsh
+```
+
+Requirements:
+
+* GitHub CLI installed (`gh`)
+* Authenticated session (`gh auth login`)
+
+
+* * *
+
 📜 License
 ----------
 
