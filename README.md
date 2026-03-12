@@ -119,6 +119,30 @@
     python darexsh-bot.py
     ```
 
+### Run with Docker Compose
+
+1. Copy env template:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+2. Edit `.env` and set at least `TOKEN` and `GITHUB_USERNAME`.
+
+3. Start:
+
+    ```bash
+    docker compose up -d --build
+    ```
+
+4. Logs:
+
+    ```bash
+    docker compose logs -f telegram-bot
+    ```
+
+Language preferences are persisted in `data/user_languages.json`.
+
 4. **Use commands in Telegram**:
 
     * `/start` - Start page and language selection

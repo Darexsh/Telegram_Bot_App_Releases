@@ -1,6 +1,6 @@
-.env
-__pycache__/
 venv/
+__pycache__/
 *.pyc
+.env
 user_languages.json
 data/

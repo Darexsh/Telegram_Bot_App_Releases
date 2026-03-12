@@ -23,7 +23,9 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 GITHUB_USERNAME = os.getenv("GITHUB_USERNAME", "Darexsh")
-LANG_STORE_PATH = Path(__file__).with_name("user_languages.json")
+LANG_STORE_PATH = Path(
+    os.getenv("LANG_STORE_PATH", str(Path(__file__).with_name("user_languages.json")))
+)
 MAX_REPOS = int(os.getenv("MAX_REPOS", "20"))
 GITHUB_CACHE_TTL_SECONDS = int(os.getenv("GITHUB_CACHE_TTL_SECONDS", "300"))
 GITHUB_MAX_RETRIES = int(os.getenv("GITHUB_MAX_RETRIES", "2"))

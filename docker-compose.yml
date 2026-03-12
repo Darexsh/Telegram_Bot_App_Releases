@@ -1,0 +1,11 @@
+services:
+  telegram-bot:
+    build: .
+    container_name: darexsh-telegram-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      LANG_STORE_PATH: /data/user_languages.json
+    volumes:
+      - ./data:/data
