@@ -63,30 +63,39 @@
 1. **Clone from GitHub**:
 
     ```bash
-    git clone https://github.com/Darexsh/Server_Routing_Darexsh.git
+    git clone https://github.com/Darexsh/Telegram_Bot_App_Releases.git
     ```
 
 2. **Open bot directory**:
 
     ```bash
-    cd Server_Routing_Darexsh/telegram_bot
+    cd Telegram_Bot_App_Releases
     ```
 
-3. **Create virtual environment and install dependencies**:
+3. **Create env file from template**:
 
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
+    cp .env.example .env
     ```
 
-   On Windows PowerShell:
+4. **Edit `.env` and set at least**:
 
-    ```powershell
-    python -m venv venv
-    .\venv\Scripts\Activate.ps1
-    pip install -r requirements.txt
-    ```
+- `TOKEN=...`
+- `GITHUB_USERNAME=...`
+
+5. **Start with Docker Compose**:
+
+```bash
+docker compose up -d --build
+```
+
+6. **Check logs**:
+
+```bash
+docker compose logs -f telegram-bot
+```
+
+Language preferences are persisted in `data/user_languages.json`.
 
 
 * * *
@@ -96,62 +105,53 @@
 
 1. **Create a bot via BotFather**:
 
-    * Open Telegram and chat with `@BotFather`.
+- Open Telegram and chat with `@BotFather`.
+- Send `/newbot` and follow the setup.
+- Copy the generated token.
 
-    * Send `/newbot` and follow the setup.
+2. **Set `.env` values**:
 
-    * Copy the generated token.
+```env
+TOKEN=YOUR_NEW_BOT_TOKEN
+GITHUB_USERNAME=YOUR_USER_NAME
+MAX_REPOS=20
+GITHUB_CACHE_TTL_SECONDS=300
+GITHUB_MAX_RETRIES=2
+GITHUB_RETRY_BACKOFF_SECONDS=0.8
+```
 
-2. **Create `.env` file**:
+3. **Run bot (Docker Compose)**:
 
-    ```env
-    TOKEN=YOUR_NEW_BOT_TOKEN
-    GITHUB_USERNAME=YOUR_USER_NAME
-    MAX_REPOS=20
-    GITHUB_CACHE_TTL_SECONDS=300
-    GITHUB_MAX_RETRIES=2
-    GITHUB_RETRY_BACKOFF_SECONDS=0.8
-    ```
-
-3. **Start bot**:
-
-    ```bash
-    python darexsh-bot.py
-    ```
-
-### Run with Docker Compose
-
-1. Copy env template:
-
-    ```bash
-    cp .env.example .env
-    ```
-
-2. Edit `.env` and set at least `TOKEN` and `GITHUB_USERNAME`.
-
-3. Start:
-
-    ```bash
-    docker compose up -d --build
-    ```
-
-4. Logs:
-
-    ```bash
-    docker compose logs -f telegram-bot
-    ```
-
-Language preferences are persisted in `data/user_languages.json`.
+```bash
+docker compose up -d --build
+```
 
 4. **Use commands in Telegram**:
 
-    * `/start` - Start page and language selection
+- `/start` - Start page and language selection
+- `/apps` - Show app portfolio
+- `/language` - Switch language
+- `/help` - Show command help
 
-    * `/apps` - Show app portfolio
+### Optional: Run without Docker
 
-    * `/language` - Switch language
+Linux/macOS:
 
-    * `/help` - Show command help
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python darexsh-bot.py
+```
+
+Windows PowerShell:
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python darexsh-bot.py
+```
 
 
 * * *
@@ -187,7 +187,7 @@ If you want automatic Telegram notifications when a release is published (withou
 
 * 🌐 Uses **GitHub REST API** for repository and release metadata.
 
-* 🧠 User language preferences are persisted locally in `user_languages.json`.
+* 🧠 User language preferences are persisted locally (`data/user_languages.json` in Docker mode).
 
 * ⚡ GitHub responses are cached in-memory with configurable TTL.
 
@@ -205,7 +205,7 @@ If you want automatic Telegram notifications when a release is published (withou
 
 * If token leaks, rotate immediately in BotFather (`/revoke` or regenerate token).
 
-* Ensure `.gitignore` excludes runtime and secret files (`.env`, `venv/`, `__pycache__/`, `user_languages.json`).
+* Ensure `.gitignore` excludes runtime and secret files (`.env`, `venv/`, `__pycache__/`, `user_languages.json`, `data/`).
 
 
 * * *
