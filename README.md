@@ -10,6 +10,9 @@
 
 ![Project Status](https://img.shields.io/badge/Status-Active-brightgreen) ![License](https://img.shields.io/badge/License-NonCommercial-blue) ![Platform](https://img.shields.io/badge/Platform-Telegram-2CA5E0) ![Language](https://img.shields.io/badge/Languages-DE%20%2F%20EN-orange)
 
+[![Telegram Bot](https://img.shields.io/badge/Telegram-Bot-2AABEE?logo=telegram&logoColor=white)](https://t.me/darexsh_bot) [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/darexsh)  
+<sub>Check out my bot in Telegram for an easy project overview.<br>If you want to support more projects, you can leave a small donation for a coffee.</sub>
+
 </div>
 
 
