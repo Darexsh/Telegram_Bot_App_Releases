@@ -8,6 +8,6 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY darexsh-bot.py apps_data.py ./
+COPY bot.py darexsh-bot.py apps_data.py sync_projects.py telegram_health_server.py ./
 
-CMD ["python", "darexsh-bot.py"]
+CMD ["python", "bot.py"]

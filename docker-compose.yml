@@ -1,11 +1,39 @@
 services:
-  telegram-bot:
+  telegram-sync:
     build: .
-    container_name: darexsh-telegram-bot
+    container_name: telegram-showcase-sync
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      LANG_STORE_PATH: /data/user_languages.json
+      PROJECTS_SNAPSHOT_PATH: /data/projects_snapshot.json
+    command: ["python", "sync_projects.py"]
     volumes:
       - ./data:/data
+
+  telegram-bot:
+    build: .
+    container_name: telegram-showcase-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PROJECTS_SNAPSHOT_PATH: /data/projects_snapshot.json
+      LANG_STORE_PATH: /data/user_languages.json
+    command: ["python", "bot.py"]
+    volumes:
+      - ./data:/data
+    depends_on:
+      - telegram-sync
+
+  telegram-health:
+    build: .
+    container_name: telegram-showcase-health
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TELEGRAM_HEALTH_CACHE_TTL: ${TELEGRAM_HEALTH_CACHE_TTL:-60}
+    command: ["python", "telegram_health_server.py"]
+    ports:
+      - "9106:9106"

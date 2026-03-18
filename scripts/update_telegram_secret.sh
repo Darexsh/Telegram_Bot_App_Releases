@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ $# -lt 1 ]]; then
   echo "Usage: $0 <github-owner>"
-  echo "Example: $0 Darexsh"
+  echo "Example: $0 your-github-user-or-org"
   exit 1
 fi
 

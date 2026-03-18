@@ -11,7 +11,7 @@
 ![Project Status](https://img.shields.io/badge/Status-Active-brightgreen) ![License](https://img.shields.io/badge/License-NonCommercial-blue) ![Platform](https://img.shields.io/badge/Platform-Telegram-2CA5E0) ![Language](https://img.shields.io/badge/Languages-DE%20%2F%20EN-orange)
 
 [![Telegram Bot](https://img.shields.io/badge/Telegram-Bot-2AABEE?logo=telegram&logoColor=white)](https://t.me/darexsh_bot) [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-yellow?logo=buy-me-a-coffee)](https://buymeacoffee.com/darexsh)  
-<sub>Check out my bot in Telegram for an easy project overview.<br>If you want to support more projects, you can leave a small donation for a coffee.</sub>
+<sub>Check out my bot in Telegram to see it in live action.<br>If you want to support more projects, you can leave a small donation for a coffee.</sub>
 
 </div>
 
@@ -30,7 +30,7 @@
 🚀 About the Project
 ==============
 
-**Darexsh Telegram Bot** is a bilingual (German/English) Telegram bot that presents curated app projects directly from GitHub in a clean portfolio format. It shows release information, update activity, and quick links for repository and APK releases.
+**Telegram GitHub Showcase Bot** is a bilingual (German/English) Telegram bot that presents curated app projects directly from GitHub in a clean portfolio format. It shows release information, update activity, and quick links for repository and APK releases.
 
 * * *
 
@@ -50,6 +50,12 @@
 * ⬇️ **APK-Only Download Button**: Download button appears only when latest release provides an `.apk` asset.
 
 * 🔁 **Inline Navigation**: Browse apps with previous/next buttons and refresh from inside Telegram.
+
+* 🧩 **Category Filter Menu**: Dynamic category buttons are built from your `apps_data.py` metadata.
+
+* 🗂️ **Snapshot-Based Data Flow**: `telegram-sync` writes `/data/projects_snapshot.json`, and the bot reads from it for consistent, low-latency responses.
+
+* ❤️ **Health Endpoint Service**: `telegram-health` exposes `/status` (port `9106`) for external monitoring/badges.
 
 * ⚡ **No Polling for Release Notifications**: Optional GitHub Actions workflow can push release notifications to Telegram directly.
 
@@ -85,17 +91,23 @@
 
 - `TOKEN=...`
 - `GITHUB_USERNAME=...`
+- `GITHUB_TOKEN=...` (recommended)
 
-5. **Start with Docker Compose**:
+5. **Edit `apps_data.py` and define your repositories**:
+
+- Add/update repository keys to match your real GitHub repo names.
+- Set display names, categories, descriptions, and optional links.
+
+6. **Build and start services with Docker Compose**:
 
 ```bash
-docker compose up -d --build
+docker compose up -d --build telegram-sync telegram-bot telegram-health
 ```
 
-6. **Check logs**:
+7. **Check logs**:
 
 ```bash
-docker compose logs -f telegram-bot
+docker compose logs -f telegram-sync telegram-bot telegram-health
 ```
 
 Language preferences are persisted in `data/user_languages.json`.
@@ -117,24 +129,50 @@ Language preferences are persisted in `data/user_languages.json`.
 ```env
 TOKEN=YOUR_NEW_BOT_TOKEN
 GITHUB_USERNAME=YOUR_USER_NAME
+GITHUB_TOKEN=YOUR_GITHUB_TOKEN
+BOT_TITLE=Darexsh Projects
+BOT_FOOTER=Darexsh by Daniel Sichler
+BOT_IDENTIFIER=darexsh-telegram
 MAX_REPOS=20
 GITHUB_CACHE_TTL_SECONDS=300
 GITHUB_MAX_RETRIES=2
 GITHUB_RETRY_BACKOFF_SECONDS=0.8
+TELEGRAM_SYNC_INTERVAL_SECONDS=86400
+TELEGRAM_HEALTH_CACHE_TTL=60
 ```
 
-3. **Run bot (Docker Compose)**:
+3. **Run services (Docker Compose)**:
 
 ```bash
-docker compose up -d --build
+docker compose up -d --build telegram-sync telegram-bot telegram-health
 ```
 
-4. **Use commands in Telegram**:
+4. **Verify services**:
+
+```bash
+docker compose ps
+docker compose logs -f telegram-sync telegram-bot telegram-health
+```
+
+Health endpoint:
+
+```bash
+curl -s http://localhost:9106/status
+```
+
+5. **Use commands in Telegram**:
 
 - `/start` - Start page and language selection
 - `/apps` - Show app portfolio
 - `/language` - Switch language
 - `/help` - Show command help
+
+6. **Manual snapshot refresh (optional)**:
+
+```bash
+docker compose up -d --force-recreate telegram-sync
+docker compose logs -f telegram-sync
+```
 
 ### Optional: Run without Docker
 
@@ -144,7 +182,7 @@ Linux/macOS:
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python darexsh-bot.py
+python bot.py
 ```
 
 Windows PowerShell:
@@ -153,7 +191,7 @@ Windows PowerShell:
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-python darexsh-bot.py
+python bot.py
 ```
 
 
@@ -228,28 +266,28 @@ Usage:
 
 ```bash
 chmod +x scripts/update_telegram_secret.sh
-./scripts/update_telegram_secret.sh Darexsh
+./scripts/update_telegram_secret.sh your-github-user-or-org
 ```
 
-`Darexsh` is the required GitHub owner argument (`<github-owner>`).
+`your-github-user-or-org` is the required GitHub owner argument (`<github-owner>`).
 
 Or with environment variable:
 
 ```bash
-NEW_TG_TOKEN='YOUR_NEW_BOT_TOKEN' ./scripts/update_telegram_secret.sh Darexsh
+NEW_TG_TOKEN='YOUR_NEW_BOT_TOKEN' ./scripts/update_telegram_secret.sh your-github-user-or-org
 ```
 
 PowerShell (Windows):
 
 ```powershell
-.\scripts\update_telegram_secret.ps1 Darexsh
+.\scripts\update_telegram_secret.ps1 your-github-user-or-org
 ```
 
 PowerShell with environment variable:
 
 ```powershell
 $env:NEW_TG_TOKEN='YOUR_NEW_BOT_TOKEN'
-.\scripts\update_telegram_secret.ps1 Darexsh
+.\scripts\update_telegram_secret.ps1 your-github-user-or-org
 ```
 
 Requirements:
